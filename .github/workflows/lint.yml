@@ -1,0 +1,61 @@
+name: Lint
+
+on:
+  push:
+    paths:
+      - '**.ts'
+      - '**.tsx'
+      - '.github/workflows/lint.yml'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'eslint.config.js'
+      - 'tsconfig.json'
+      - 'jest.config.js'
+      - '.prettierrc'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Find @ts-ignore directives
+        run: |
+          if grep -r "@ts-ignore" ./src; then
+          echo "Error: Found @ts-ignore directive(s)"
+          exit 1
+          else
+          echo "No @ts-ignore directives found"
+          fi
+
+      - name: Find console.log statements
+        run: |
+          if grep -r "console.log" ./src; then
+            echo "Error: Found console.log statement(s)"
+            exit 1
+          else
+            echo "No console.log statements found"
+          fi
+
+      - name: Find @ts-expect-error directives
+        run: |
+          if grep -r "@ts-expect-error" ./src; then
+            echo "Error: Found @ts-expect-error directive(s)"
+            exit 1
+          else
+            echo "No @ts-expect-error directives found"
+          fi
+
+      - name: Lint with ESLint
+        run: npm run lint
