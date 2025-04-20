@@ -62,9 +62,7 @@ const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps<T>) =>
     }, [fetchData]);
 
     const toggleColumn = useCallback((alias: string) => {
-        setColumns((cols) =>
-            cols.map((col) => (col.alias === alias ? { ...col, is_hidden: !col.is_hidden } : col)),
-        );
+        setColumns((cols) => cols.map((col) => (col.alias === alias ? { ...col, is_hidden: !col.is_hidden } : col)));
     }, []);
 
     return {

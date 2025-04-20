@@ -18,9 +18,7 @@ const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const toggleRowSelection = (row: T) => {
-        setSelectedRows((prev) =>
-            prev.includes(row) ? prev.filter((r) => r !== row) : [...prev, row]
-        );
+        setSelectedRows((prev) => (prev.includes(row) ? prev.filter((r) => r !== row) : [...prev, row]));
     };
 
     const runBulkAction = useCallback(
@@ -46,7 +44,7 @@ const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
                     onError?.(error);
                 });
         },
-        [schema.bulk_actions, schema.routes.actions.bulk]
+        [schema.bulk_actions, schema.routes.actions.bulk],
     );
 
     return {

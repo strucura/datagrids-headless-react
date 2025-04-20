@@ -112,5 +112,14 @@ describe('useDataGrid', () => {
             { alias: 'name', type: 'string', is_sortable: true, is_filterable: true, is_row_key: false, is_hidden: true, meta: {} },
             { alias: 'age', type: 'number', is_sortable: true, is_filterable: true, is_row_key: false, is_hidden: false, meta: {} },
         ]);
+
+        act(() => {
+            result.current.toggleColumn('name');
+        });
+
+        expect(result.current.columns).toEqual([
+            { alias: 'name', type: 'string', is_sortable: true, is_filterable: true, is_row_key: false, is_hidden: false, meta: {} },
+            { alias: 'age', type: 'number', is_sortable: true, is_filterable: true, is_row_key: false, is_hidden: false, meta: {} },
+        ]);
     });
 });

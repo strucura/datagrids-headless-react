@@ -39,7 +39,7 @@ const useInlineAction = ({ schema }: UseInlineActionProps) => {
                     onError?.(error);
                 });
         },
-        [schema.inline_actions, schema.routes.actions.inline]
+        [schema.inline_actions, schema.routes.actions.inline],
     );
 
     return {
