@@ -21,6 +21,7 @@
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@types/jest": "^29.5.14",
+    "@types/react": "^19.1.2",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "babel-eslint": "^10.1.0",
@@ -42,5 +43,9 @@
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.19.1"
   },
-  "jest-environment-jsdom": "^29.7.0"
+  "jest-environment-jsdom": "^29.7.0",
+  "dependencies": {
+    "react": "^19.1.0",
+    "ziggy-js": "^2.5.2"
+  }
 }

@@ -1,0 +1,21 @@
+export enum FilterOperator {
+    StartsWith = 'startsWith',
+    Contains = 'contains',
+    DoesNotContain = 'doesNotContain',
+    EndsWith = 'endsWith',
+    Equals = 'equals',
+    DoesNotEqual = 'doesNotEquals',
+    In = 'in',
+    NotIn = 'notIn',
+    LessThan = 'lt',
+    LessThanOrEqualTo = 'lte',
+    GreaterThan = 'gt',
+    GreaterThanOrEqualTo = 'gte',
+    // BETWEEN = 'between';
+    DateIs = 'dateIs',
+    DateIsNot = 'dateIsNot',
+    DateBefore = 'dateBefore',
+    DateAfter = 'dateAfter',
+    DateOnOrBefore = 'dateOnOrBefore',
+    DateOnOrAfter = 'dateOnOrAfter',
+}
