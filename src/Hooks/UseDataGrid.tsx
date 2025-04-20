@@ -1,39 +1,20 @@
-import { ColumnSchema, DataGridSchema, FilterSetSchema, SortSchema } from '@/Schema';
+import { ColumnSchema, DataGridSchema, FilterSetSchema, PaginationSchema, SortSchema } from '@/Schema';
 import { useCallback, useEffect, useState } from 'react';
 import { route } from 'ziggy-js';
 
-interface UseTableProps {
+interface UseDataGridProps<T> {
     schema: DataGridSchema;
-    localStorageKeyPrefix?: string; // Optional prefix for local storage keys
+    onSuccess?: (data: T[]) => void;
+    onError?: (error: Error) => void;
 }
 
-export interface PaginationState {
-    currentPage: number;
-    perPage: number;
-    lastPage: number;
-    total: number;
-    from: number;
-    to: number;
-}
-
-const useDataGrid = <T,>({ schema }: UseTableProps) => {
-    /**
-     * Initialize Row Data
-     */
+const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps<T>) => {
     const [data, setData] = useState<T[]>([]);
-
-    /**
-     * Initialize State for our selected rows, filter sets, sorts, and columns
-     */
-    const [selectedRows, setSelectedRows] = useState<T[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [filterSets, setFilterSets] = useState<FilterSetSchema[]>([]);
-    const [sorts, setSorts] = useState<SortSchema[]>(schema.default_sorts || []);
+    const [sorts, setSorts] = useState(schema.default_sorts || []);
     const [columns, setColumns] = useState<ColumnSchema[]>(schema.columns);
-
-    /**
-     * Initialize State for our data and pagination
-     */
-    const [pagination, setPagination] = useState<PaginationState>({
+    const [pagination, setPagination] = useState<PaginationSchema>({
         currentPage: 1,
         perPage: 10,
         lastPage: 1,
@@ -42,21 +23,21 @@ const useDataGrid = <T,>({ schema }: UseTableProps) => {
         to: 0,
     });
 
-    /**
-     * Fetch data from the server based on the current state of pagination, sorts, and filterSets
-     */
     const fetchData = useCallback(() => {
+        setIsLoading(true);
+        const requestBody = {
+            page: pagination.currentPage,
+            per_page: pagination.perPage,
+            sorts,
+            filter_sets: filterSets,
+        };
+
         fetch(route(schema.routes.data), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body: JSON.stringify({
-                page: pagination.currentPage,
-                per_page: pagination.perPage,
-                sorts: sorts,
-                filter_sets: filterSets,
-            }),
+            body: JSON.stringify(requestBody),
         })
-            .then((response) => response.json())
+            .then((res) => res.json())
             .then((data) => {
                 setPagination({
                     currentPage: data.current_page,
@@ -66,21 +47,27 @@ const useDataGrid = <T,>({ schema }: UseTableProps) => {
                     from: data.from,
                     to: data.to,
                 });
-                setSelectedRows([]);
                 setData(data.data);
-            });
+                onSuccess?.(data.data);
+            })
+            .catch((err) => {
+                console.error('Error fetching data:', err);
+                onError?.(err);
+            })
+            .finally(() => setIsLoading(false));
     }, [pagination.currentPage, pagination.perPage, sorts, filterSets, schema.routes.data]);
 
-    /**
-     * Fetch data when the component mounts or when any of the dependencies change
-     */
     useEffect(() => {
         fetchData();
     }, [fetchData]);
 
+    const toggleColumn = useCallback((alias: string) => {
+        setColumns((cols) =>
+            cols.map((col) => (col.alias === alias ? { ...col, is_hidden: !col.is_hidden } : col)),
+        );
+    }, []);
+
     return {
-        selectedRows,
-        setSelectedRows,
         columns,
         setColumns,
         filterSets,
@@ -90,6 +77,8 @@ const useDataGrid = <T,>({ schema }: UseTableProps) => {
         data,
         pagination,
         setPagination,
+        toggleColumn,
+        isLoading,
     };
 };
 
