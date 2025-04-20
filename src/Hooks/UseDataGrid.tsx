@@ -12,7 +12,7 @@ const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps<T>) =>
     const [data, setData] = useState<T[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [filterSets, setFilterSets] = useState<FilterSetSchema[]>([]);
-    const [sorts, setSorts] = useState(schema.default_sorts || []);
+    const [sorts, setSorts] = useState<SortSchema[]>(schema.default_sorts || []);
     const [columns, setColumns] = useState<ColumnSchema[]>(schema.columns);
     const [pagination, setPagination] = useState<PaginationSchema>({
         currentPage: 1,
@@ -79,6 +79,7 @@ const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps<T>) =>
         setPagination,
         toggleColumn,
         isLoading,
+        fetchData,
     };
 };
 
