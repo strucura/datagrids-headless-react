@@ -48,6 +48,8 @@ const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps<T>) =>
                     to: data.to,
                 });
                 setData(data.data);
+            })
+            .then(() => {
                 onSuccess?.(data.data);
             })
             .catch((err) => {

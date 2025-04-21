@@ -36,12 +36,13 @@ const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
                 body: JSON.stringify({ action, row_keys: selectedRowKeys }),
             })
                 .then((response) => {
-                    setIsLoading(false);
                     onSuccess?.(response);
                 })
                 .catch((error) => {
-                    setIsLoading(false);
                     onError?.(error);
+                })
+                .finally(() => {
+                    setIsLoading(false);
                 });
         },
         [schema.bulk_actions, schema.routes.actions.bulk],

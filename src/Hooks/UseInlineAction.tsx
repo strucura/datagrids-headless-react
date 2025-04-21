@@ -31,12 +31,13 @@ const useInlineAction = ({ schema }: UseInlineActionProps) => {
                 body: JSON.stringify({ action, row_key: selectedRowKey }),
             })
                 .then((response) => {
-                    setIsLoading(false);
                     onSuccess?.(response);
                 })
                 .catch((error) => {
-                    setIsLoading(false);
                     onError?.(error);
+                })
+                .finally(() => {
+                    setIsLoading(false);
                 });
         },
         [schema.inline_actions, schema.routes.actions.inline],
