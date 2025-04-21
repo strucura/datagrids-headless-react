@@ -25,10 +25,13 @@ export interface StoreBookmarkProps {
 }
 
 const useBookmark = ({ schema }: UseBookmarkProps) => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingBookmarks, setIsLoadingBookmarks] = useState(false);
+    const [isDeletingBookmark, setIsDeletingBookmark] = useState(false);
+    const [isStoringBookmark, setIsStoringBookmark] = useState(false);
     const [bookmarks, setBookmarks] = useState<BookmarkSchema[]>([]);
 
     const fetchBookmarks = useCallback(() => {
+        setIsLoadingBookmarks(true);
         fetch(route(schema.routes.bookmarks.index))
             .then((response) => response.json())
             .then((data) => {
@@ -36,6 +39,8 @@ const useBookmark = ({ schema }: UseBookmarkProps) => {
             })
             .catch((error) => {
                 console.error('Error fetching bookmarks:', error);
+            }).finally(() => {
+                setIsLoadingBookmarks(false);
             });
     }, [schema.routes.bookmarks.index]);
 
@@ -46,7 +51,7 @@ const useBookmark = ({ schema }: UseBookmarkProps) => {
 
     const storeBookmark = useCallback(
         ({ bookmarkName, filterSets, sorts, columns, onSuccess, onError }: StoreBookmarkProps) => {
-            setIsLoading(true);
+            setIsStoringBookmark(true);
             fetch(route(schema.routes.bookmarks.store), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -68,7 +73,7 @@ const useBookmark = ({ schema }: UseBookmarkProps) => {
                     onError?.(error);
                 })
                 .finally(() => {
-                    setIsLoading(false);
+                    setIsStoringBookmark(false);
                 });
         },
         [schema.routes.bookmarks.store, bookmarks],
@@ -76,7 +81,7 @@ const useBookmark = ({ schema }: UseBookmarkProps) => {
 
     const deleteBookmark = useCallback(
         ({ id, onSuccess, onError }: DeleteBookmarkProps) => {
-            setIsLoading(true);
+            setIsDeletingBookmark(true);
             fetch(
                 route(schema.routes.bookmarks.destroy, {
                     id,
@@ -97,7 +102,7 @@ const useBookmark = ({ schema }: UseBookmarkProps) => {
                     onError?.(error);
                 })
                 .finally(() => {
-                    setIsLoading(false);
+                    setIsDeletingBookmark(false);
                 });
         },
         [schema.routes.bookmarks.destroy, bookmarks],
@@ -109,7 +114,9 @@ const useBookmark = ({ schema }: UseBookmarkProps) => {
         bookmarks,
         storeBookmark,
         deleteBookmark,
-        isLoadingBookmarks: isLoading,
+        isLoadingBookmarks,
+        isDeletingBookmark,
+        isStoringBookmark,
     };
 };
 
