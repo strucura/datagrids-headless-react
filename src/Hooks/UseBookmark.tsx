@@ -39,7 +39,8 @@ const useBookmark = ({ schema }: UseBookmarkProps) => {
             })
             .catch((error) => {
                 console.error('Error fetching bookmarks:', error);
-            }).finally(() => {
+            })
+            .finally(() => {
                 setIsLoadingBookmarks(false);
             });
     }, [schema.routes.bookmarks.index]);
