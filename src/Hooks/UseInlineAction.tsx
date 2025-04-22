@@ -45,7 +45,7 @@ export const useInlineAction = ({ schema }: UseInlineActionProps) => {
     );
 
     return {
-        hasInlineActions: inlineActions.length,
+        hasInlineActions: inlineActions.length > 0,
         inlineActions: inlineActions,
         setInlineActions,
         runInlineAction,
