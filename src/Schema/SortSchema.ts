@@ -1,8 +1,6 @@
 import { SortOperator } from '@/Enums';
 
-interface Sort {
+export interface SortSchema {
     alias: string;
     sort_operator: SortOperator;
 }
-
-export default Sort;

@@ -1,7 +1,4 @@
-import { BookmarkSchema } from '@/Schema/BookmarkSchema.js';
-import FilterSetSchema from '@/Schema/FilterSetSchema.js';
-import { DataGridSchema } from '@/Schema/index.js';
-import SortSchema from '@/Schema/SortSchema.js';
+import { DataGridSchema, SortSchema, FilterSetSchema, BookmarkSchema } from '@/Schema';
 import { useCallback, useEffect, useState } from 'react';
 import { route } from 'ziggy-js';
 
@@ -24,7 +21,7 @@ export interface StoreBookmarkProps {
     onError?: (error: Error) => void;
 }
 
-const useBookmark = ({ schema }: UseBookmarkProps) => {
+export const useBookmark = ({ schema }: UseBookmarkProps) => {
     const [isLoadingBookmarks, setIsLoadingBookmarks] = useState(false);
     const [isDeletingBookmark, setIsDeletingBookmark] = useState(false);
     const [isStoringBookmark, setIsStoringBookmark] = useState(false);
@@ -66,8 +63,6 @@ const useBookmark = ({ schema }: UseBookmarkProps) => {
                 .then((response) => response.json())
                 .then((data) => {
                     setBookmarks((prevBookmarks) => [...prevBookmarks, data.bookmark]);
-                })
-                .then(() => {
                     onSuccess?.();
                 })
                 .catch((error) => {
@@ -95,8 +90,6 @@ const useBookmark = ({ schema }: UseBookmarkProps) => {
                 .then((response) => response.json())
                 .then(() => {
                     setBookmarks((prevBookmarks) => prevBookmarks.filter((bookmark) => bookmark.id !== id));
-                })
-                .then(() => {
                     onSuccess?.();
                 })
                 .catch((error) => {
@@ -121,4 +114,3 @@ const useBookmark = ({ schema }: UseBookmarkProps) => {
     };
 };
 
-export default useBookmark;

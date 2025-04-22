@@ -1,6 +1,6 @@
 
 import { renderHook, act } from '@testing-library/react';
-import useBulkAction from '@/Hooks/UseBulkAction';
+import {useBulkAction} from '@/Hooks';
 import { DataGridSchema } from '@/Schema';
 import { route } from 'ziggy-js';
 

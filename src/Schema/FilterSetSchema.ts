@@ -1,9 +1,7 @@
 import { FilterSetOperator } from '@/Enums';
 import { FilterSchema } from '@/Schema';
 
-interface FilterSet {
+export interface FilterSetSchema {
     filter_set_operator: FilterSetOperator;
     filters: Array<FilterSchema>;
 }
-
-export default FilterSet;

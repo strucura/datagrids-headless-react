@@ -1,4 +1,4 @@
-import { DataGridSchema } from '@/Schema/index.js';
+import { DataGridSchema } from '@/Schema';
 import { useCallback, useState } from 'react';
 import { route } from 'ziggy-js';
 
@@ -6,14 +6,14 @@ interface UseBulkActionProps {
     schema: DataGridSchema;
 }
 
-interface PerformBulkActionProps {
+export interface PerformBulkActionProps {
     action: string;
     selectedRowKeys: string | number[];
     onSuccess?: (response: Response) => void;
     onError?: (error: Error) => void;
 }
 
-const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
+export const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
     const [selectedRows, setSelectedRows] = useState<T[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -58,5 +58,3 @@ const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
         isRunningBulkAction: isLoading,
     };
 };
-
-export default useBulkAction;

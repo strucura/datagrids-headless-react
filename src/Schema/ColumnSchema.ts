@@ -1,4 +1,4 @@
-export default interface ColumnSchema {
+export interface ColumnSchema {
     alias: string;
     type: string;
     is_sortable: boolean;

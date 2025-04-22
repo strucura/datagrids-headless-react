@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import useInlineAction from '@/Hooks/UseInlineAction';
+import {useInlineAction} from '@/Hooks';
 import { DataGridSchema } from '@/Schema';
 import { route } from 'ziggy-js';
 

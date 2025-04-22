@@ -8,9 +8,9 @@ interface UseDataGridProps<T> {
     onError?: (error: Error) => void;
 }
 
-const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps<T>) => {
+export const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps<T>) => {
     const [data, setData] = useState<T[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isDataGridLoading, setIsDataGridLoading] = useState(false);
     const [filterSets, setFilterSets] = useState<FilterSetSchema[]>([]);
     const [sorts, setSorts] = useState<SortSchema[]>(schema.default_sorts || []);
     const [columns, setColumns] = useState<ColumnSchema[]>(schema.columns);
@@ -24,7 +24,7 @@ const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps<T>) =>
     });
 
     const fetchData = useCallback(() => {
-        setIsLoading(true);
+        setIsDataGridLoading(true);
         const requestBody = {
             page: pagination.currentPage,
             per_page: pagination.perPage,
@@ -48,15 +48,13 @@ const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps<T>) =>
                     to: data.to,
                 });
                 setData(data.data);
-            })
-            .then(() => {
                 onSuccess?.(data.data);
             })
             .catch((err) => {
                 console.error('Error fetching data:', err);
                 onError?.(err);
             })
-            .finally(() => setIsLoading(false));
+            .finally(() => setIsDataGridLoading(false));
     }, [pagination.currentPage, pagination.perPage, sorts, filterSets, schema.routes.data]);
 
     useEffect(() => {
@@ -78,9 +76,7 @@ const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps<T>) =>
         pagination,
         setPagination,
         toggleColumn,
-        isLoading,
+        isDataGridLoading,
         fetchData,
     };
 };
-
-export default useDataGrid;

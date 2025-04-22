@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import useDataGrid from '@/Hooks/UseDataGrid';
+import {useDataGrid} from '@/Hooks';
 import { DataGridSchema } from '@/Schema';
 import { route } from 'ziggy-js';
 
@@ -83,7 +83,7 @@ describe('useDataGrid', () => {
             from: 1,
             to: 10,
         });
-        expect(result.current.isLoading).toBe(false);
+        expect(result.current.isDataGridLoading).toBe(false);
     });
 
     it('should handle fetch errors', async () => {
@@ -98,7 +98,7 @@ describe('useDataGrid', () => {
         });
 
         expect(onError).toHaveBeenCalledWith(expect.any(Error));
-        expect(result.current.isLoading).toBe(false);
+        expect(result.current.isDataGridLoading).toBe(false);
     });
 
     it('should toggle column visibility', () => {

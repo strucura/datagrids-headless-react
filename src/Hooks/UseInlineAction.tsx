@@ -1,4 +1,4 @@
-import { DataGridSchema } from '@/Schema/index.js';
+import { DataGridSchema } from '@/Schema';
 import { useCallback, useState } from 'react';
 import { route } from 'ziggy-js';
 
@@ -6,14 +6,14 @@ interface UseInlineActionProps {
     schema: DataGridSchema;
 }
 
-interface PerformInlineActionProps {
+export interface PerformInlineActionProps {
     action: string;
     selectedRowKey: string | number;
     onSuccess?: (response: Response) => void;
     onError?: (error: Error) => void;
 }
 
-const useInlineAction = ({ schema }: UseInlineActionProps) => {
+export const useInlineAction = ({ schema }: UseInlineActionProps) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const runInlineAction = useCallback(
@@ -50,5 +50,3 @@ const useInlineAction = ({ schema }: UseInlineActionProps) => {
         isRunningInlineAction: isLoading,
     };
 };
-
-export default useInlineAction;

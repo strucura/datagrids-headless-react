@@ -1,3 +1,3 @@
-export default interface ActionSchema {
+export interface ActionSchema {
     name: string;
 }

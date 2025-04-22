@@ -1,6 +1,6 @@
 import { ActionSchema, ColumnSchema, SortSchema } from '@/Schema';
 
-export default interface DataGridSchema {
+export interface DataGridSchema {
     routes: {
         data: string;
         schema: string;

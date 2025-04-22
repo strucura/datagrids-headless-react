@@ -1,4 +1,4 @@
-export default interface PaginationSchema {
+export interface PaginationSchema {
     currentPage: number;
     perPage: number;
     lastPage: number;
