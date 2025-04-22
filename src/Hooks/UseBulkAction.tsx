@@ -16,6 +16,7 @@ export interface PerformBulkActionProps {
 export const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
     const [selectedRows, setSelectedRows] = useState<T[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [bulkActions, setBulkActions] = useState(schema.bulk_actions);
 
     const toggleRowSelection = (row: T) => {
         setSelectedRows((prev) => (prev.includes(row) ? prev.filter((r) => r !== row) : [...prev, row]));
@@ -45,12 +46,13 @@ export const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
                     setIsLoading(false);
                 });
         },
-        [schema.bulk_actions, schema.routes.actions.bulk],
+        [bulkActions, schema.routes.actions.bulk],
     );
 
     return {
-        bulkActions: schema.bulk_actions,
-        hasBulkActions: !!schema.bulk_actions.length,
+        bulkActions,
+        setBulkActions,
+        hasBulkActions: bulkActions.length > 0,
         selectedRows,
         setSelectedRows,
         toggleRowSelection,

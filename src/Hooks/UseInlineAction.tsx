@@ -15,6 +15,7 @@ export interface PerformInlineActionProps {
 
 export const useInlineAction = ({ schema }: UseInlineActionProps) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [inlineActions, setInlineActions] = useState(schema.inline_actions);
 
     const runInlineAction = useCallback(
         ({ action, selectedRowKey, onSuccess, onError }: PerformInlineActionProps) => {
@@ -40,12 +41,13 @@ export const useInlineAction = ({ schema }: UseInlineActionProps) => {
                     setIsLoading(false);
                 });
         },
-        [schema.inline_actions, schema.routes.actions.inline],
+        [inlineActions, schema.routes.actions.inline],
     );
 
     return {
-        hasInlineActions: !!schema.inline_actions.length,
-        inlineActions: schema.inline_actions,
+        hasInlineActions: inlineActions.length,
+        inlineActions: inlineActions,
+        setInlineActions,
         runInlineAction,
         isRunningInlineAction: isLoading,
     };

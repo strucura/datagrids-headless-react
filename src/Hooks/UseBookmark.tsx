@@ -1,4 +1,4 @@
-import { DataGridSchema, SortSchema, FilterSetSchema, BookmarkSchema } from '@/Schema';
+import { BookmarkSchema, DataGridSchema, FilterSetSchema, SortSchema } from '@/Schema';
 import { useCallback, useEffect, useState } from 'react';
 import { route } from 'ziggy-js';
 
@@ -113,4 +113,3 @@ export const useBookmark = ({ schema }: UseBookmarkProps) => {
         isStoringBookmark,
     };
 };
-
