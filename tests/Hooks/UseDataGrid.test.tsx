@@ -101,10 +101,30 @@ describe('useDataGrid', () => {
         expect(result.current.isDataGridLoading).toBe(false);
     });
 
-    it('should toggle column visibility', () => {
+    it('should toggle column visibility', async () => {
+        const mockResponse = {
+            current_page: 1,
+            last_page: 2,
+            per_page: 10,
+            total: 20,
+            from: 1,
+            to: 10,
+            data: [{ id: 1, name: 'John Doe', age: 30 }],
+        };
+
+        (route as jest.Mock).mockReturnValue('/data');
+        (fetch as jest.Mock).mockResolvedValue({
+            ok: true,
+            json: jest.fn().mockResolvedValue(mockResponse),
+        });
+
         const { result } = renderHook(() => useDataGrid({ schema: mockSchema }));
 
-        act(() => {
+        await act(async () => {
+            result.current.fetchData();
+        })
+
+        await act(async () => {
             result.current.toggleColumn('name');
         });
 

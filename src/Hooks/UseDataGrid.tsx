@@ -51,7 +51,6 @@ export const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps
                 onSuccess?.(data.data);
             })
             .catch((err) => {
-                console.error('Error fetching data:', err);
                 onError?.(err);
             })
             .finally(() => setIsDataGridLoading(false));

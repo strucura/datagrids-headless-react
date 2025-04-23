@@ -67,13 +67,10 @@ describe('useBulkAction', () => {
         const { result } = renderHook(() => useBulkAction<{ id: number }>({ schema: mockSchema }));
         const onSuccess = jest.fn();
 
-        await act(() => {
+        act(() => {
             result.current.toggleRowSelection({ id: 1 });
             result.current.toggleRowSelection({ id: 2 });
         });
-
-
-        console.log(result.current.selectedRows);
 
         await act(async () => {
             result.current.runBulkAction({
@@ -81,7 +78,6 @@ describe('useBulkAction', () => {
                 onSuccess,
             });
         });
-
 
         expect(route).toHaveBeenCalledWith('/actions/bulk');
         expect(fetch).toHaveBeenCalledWith('/actions/bulk', expect.objectContaining({
@@ -113,7 +109,7 @@ describe('useBulkAction', () => {
         const { result } = renderHook(() => useBulkAction<{ id: number }>({ schema: mockSchema }));
         const onError = jest.fn();
 
-        act(() => {
+        await act(() => {
             result.current.toggleRowSelection({ id: 1 });
             result.current.toggleRowSelection({ id: 2 });
         });
