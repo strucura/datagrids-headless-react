@@ -177,6 +177,7 @@ describe('useBookmark', () => {
 
     it('should handle errors when storing a bookmark', async () => {
         (route as jest.Mock).mockReturnValue('/bookmarks/store');
+        console.error = jest.fn(); // Mock console.error to suppress the error output
         (fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
 
         const { result } = renderHook(() => useBookmark({ schema: mockSchema }));
@@ -197,6 +198,8 @@ describe('useBookmark', () => {
     });
 
     it('should handle errors when deleting a bookmark', async () => {
+        const originalConsoleError = console.error; // Save the original implementation
+        console.error = jest.fn(); // Mock console.error
         (route as jest.Mock).mockReturnValue('/bookmarks/destroy');
         (fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
 
@@ -209,5 +212,6 @@ describe('useBookmark', () => {
 
         expect(onError).toHaveBeenCalledWith(expect.any(Error));
         expect(result.current.isDeletingBookmark).toBe(false);
+        console.error = originalConsoleError; // Restore the original implementation
     });
 });
