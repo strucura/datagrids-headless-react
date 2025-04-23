@@ -45,11 +45,9 @@ export const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
 
             setIsLoading(true);
 
-            console.log(selectedRows);
-            const rowKeys = selectedRows.map((row) => getRowKeyValue(schema, row));
-            //.filter((key) => key !== undefined && key !== null);
-
-            console.log(selectedRows, rowKeys);
+            const rowKeys = selectedRows
+                .map((row) => getRowKeyValue(schema, row))
+                .filter((key) => key !== undefined && key !== null);
 
             fetch(route(schema.routes.actions.bulk), {
                 method: 'POST',
