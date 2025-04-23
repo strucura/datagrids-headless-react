@@ -1,7 +1,7 @@
 import { DataGridSchema } from '@/Schema';
-import { useCallback, useMemo, useState } from 'react';
-import { route } from 'ziggy-js';
 import { getRowKeyValue } from '@/Utils';
+import { useCallback, useState } from 'react';
+import { route } from 'ziggy-js';
 
 interface UseBulkActionProps {
     schema: DataGridSchema;
@@ -46,9 +46,8 @@ export const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
             setIsLoading(true);
 
             console.log(selectedRows);
-            const rowKeys = selectedRows
-                .map((row) => getRowKeyValue(schema, row));
-                //.filter((key) => key !== undefined && key !== null);
+            const rowKeys = selectedRows.map((row) => getRowKeyValue(schema, row));
+            //.filter((key) => key !== undefined && key !== null);
 
             console.log(selectedRows, rowKeys);
 

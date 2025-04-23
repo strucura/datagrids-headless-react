@@ -1,5 +1,5 @@
 // src/Utils/getRowKeyColumn.ts
-import { DataGridSchema, ColumnSchema } from '@/Schema';
+import { ColumnSchema, DataGridSchema } from '@/Schema';
 
 /**
  * Extracts the column marked as `is_row_key` from the DataGridSchema.

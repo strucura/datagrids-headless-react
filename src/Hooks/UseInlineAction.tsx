@@ -1,7 +1,7 @@
 import { DataGridSchema } from '@/Schema';
+import { getRowKeyValue } from '@/Utils';
 import { useCallback, useState } from 'react';
 import { route } from 'ziggy-js';
-import { getRowKeyValue } from '@/Utils';
 
 interface UseInlineActionProps {
     schema: DataGridSchema;
