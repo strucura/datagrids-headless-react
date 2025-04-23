@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import {useInlineAction} from '@/Hooks';
+import { useInlineAction } from '@/Hooks';
 import { DataGridSchema } from '@/Schema';
 import { route } from 'ziggy-js';
 
@@ -25,10 +25,12 @@ describe('useInlineAction', () => {
             },
         },
         grid_key: 'test-grid',
-        columns: [],
+        columns: [
+            { alias: 'id', type: 'number', is_sortable: true, is_filterable: true, is_row_key: true, is_hidden: false, meta: {} },
+        ],
         default_sorts: [],
         bulk_actions: [],
-        inline_actions: [{ name: 'edit' }, { name: 'delete' }],
+        inline_actions: [{ name: 'edit', meta: {} }, { name: 'delete', meta: {} }],
     };
 
     beforeEach(() => {
@@ -50,10 +52,12 @@ describe('useInlineAction', () => {
         const { result } = renderHook(() => useInlineAction({ schema: mockSchema }));
         const onSuccess = jest.fn();
 
+        const selectedRow = { id: 1 };
+
         await act(async () => {
             result.current.runInlineAction({
                 action: 'edit',
-                selectedRowKey: 1,
+                selectedRow,
                 onSuccess,
             });
         });
@@ -71,10 +75,12 @@ describe('useInlineAction', () => {
         const { result } = renderHook(() => useInlineAction({ schema: mockSchema }));
         console.error = jest.fn();
 
+        const selectedRow = { id: 1 };
+
         await act(async () => {
             result.current.runInlineAction({
                 action: 'invalid-action',
-                selectedRowKey: 1,
+                selectedRow,
             });
         });
 
@@ -89,10 +95,12 @@ describe('useInlineAction', () => {
         const { result } = renderHook(() => useInlineAction({ schema: mockSchema }));
         const onError = jest.fn();
 
+        const selectedRow = { id: 1 };
+
         await act(async () => {
             result.current.runInlineAction({
                 action: 'edit',
-                selectedRowKey: 1,
+                selectedRow,
                 onError,
             });
         });

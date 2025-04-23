@@ -1,14 +1,14 @@
 import { DataGridSchema } from '@/Schema';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { route } from 'ziggy-js';
+import { getRowKeyValue } from '@/Utils';
 
 interface UseBulkActionProps {
     schema: DataGridSchema;
 }
 
-export interface PerformBulkActionProps {
+export interface RunBulkActionProps {
     action: string;
-    selectedRowKeys: string | number[];
     onSuccess?: (response: Response) => void;
     onError?: (error: Error) => void;
 }
@@ -19,22 +19,43 @@ export const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
     const [bulkActions, setBulkActions] = useState(schema.bulk_actions);
 
     const toggleRowSelection = (row: T) => {
-        setSelectedRows((prev) => (prev.includes(row) ? prev.filter((r) => r !== row) : [...prev, row]));
+        const rowKey = getRowKeyValue(schema, row);
+
+        if (rowKey === undefined || rowKey === null) {
+            console.error('Row key is undefined or null. Cannot toggle selection.');
+            return;
+        }
+
+        setSelectedRows((prev) => {
+            const rowKeyExists = prev.some((r) => getRowKeyValue(schema, r) === rowKey);
+            if (rowKeyExists) {
+                return prev.filter((r) => getRowKeyValue(schema, r) !== rowKey);
+            } else {
+                return [...prev, row];
+            }
+        });
     };
 
     const runBulkAction = useCallback(
-        ({ action, selectedRowKeys, onSuccess, onError }: PerformBulkActionProps) => {
-            if (!schema.bulk_actions.some((a) => a.name === action)) {
+        ({ action, onSuccess, onError }: RunBulkActionProps) => {
+            if (!bulkActions.some((a) => a.name === action)) {
                 console.error(`Invalid bulk action: "${action}"`);
                 return;
             }
 
             setIsLoading(true);
 
+            console.log(selectedRows);
+            const rowKeys = selectedRows
+                .map((row) => getRowKeyValue(schema, row));
+                //.filter((key) => key !== undefined && key !== null);
+
+            console.log(selectedRows, rowKeys);
+
             fetch(route(schema.routes.actions.bulk), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                body: JSON.stringify({ action, row_keys: selectedRowKeys }),
+                body: JSON.stringify({ action, row_keys: rowKeys }),
             })
                 .then((response) => {
                     onSuccess?.(response);
@@ -46,7 +67,7 @@ export const useBulkAction = <T,>({ schema }: UseBulkActionProps) => {
                     setIsLoading(false);
                 });
         },
-        [bulkActions, schema.routes.actions.bulk],
+        [bulkActions, selectedRows, schema.routes.actions.bulk],
     );
 
     return {

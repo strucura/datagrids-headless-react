@@ -62,7 +62,12 @@ export const useBookmark = ({ schema }: UseBookmarkProps) => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    setBookmarks((prevBookmarks) => [...prevBookmarks, data.bookmark]);
+                    setBookmarks((prevBookmarks) => {
+                        if (!Array.isArray(prevBookmarks)) {
+                            return [data.bookmark]; // Fallback to a new array with the current bookmark
+                        }
+                        return [...prevBookmarks, data.bookmark];
+                    });
                     onSuccess?.();
                 })
                 .catch((error) => {
@@ -72,7 +77,7 @@ export const useBookmark = ({ schema }: UseBookmarkProps) => {
                     setIsStoringBookmark(false);
                 });
         },
-        [schema.routes.bookmarks.store, bookmarks],
+        [schema.routes.bookmarks.store],
     );
 
     const deleteBookmark = useCallback(
@@ -87,7 +92,6 @@ export const useBookmark = ({ schema }: UseBookmarkProps) => {
                     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
                 },
             )
-                .then((response) => response.json())
                 .then(() => {
                     setBookmarks((prevBookmarks) => prevBookmarks.filter((bookmark) => bookmark.id !== id));
                     onSuccess?.();
@@ -99,7 +103,7 @@ export const useBookmark = ({ schema }: UseBookmarkProps) => {
                     setIsDeletingBookmark(false);
                 });
         },
-        [schema.routes.bookmarks.destroy, bookmarks],
+        [schema.routes.bookmarks.destroy],
     );
 
     return {

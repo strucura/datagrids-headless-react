@@ -1,25 +1,26 @@
 import { DataGridSchema } from '@/Schema';
 import { useCallback, useState } from 'react';
 import { route } from 'ziggy-js';
+import { getRowKeyValue } from '@/Utils';
 
 interface UseInlineActionProps {
     schema: DataGridSchema;
 }
 
-export interface PerformInlineActionProps {
+export interface RunInlineActionProps<T> {
     action: string;
-    selectedRowKey: string | number;
+    selectedRow: T;
     onSuccess?: (response: Response) => void;
     onError?: (error: Error) => void;
 }
 
-export const useInlineAction = ({ schema }: UseInlineActionProps) => {
+export const useInlineAction = <T,>({ schema }: UseInlineActionProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [inlineActions, setInlineActions] = useState(schema.inline_actions);
 
     const runInlineAction = useCallback(
-        ({ action, selectedRowKey, onSuccess, onError }: PerformInlineActionProps) => {
-            if (!schema.inline_actions.some((a) => a.name === action)) {
+        ({ action, selectedRow, onSuccess, onError }: RunInlineActionProps<T>) => {
+            if (!inlineActions.some((a) => a.name === action)) {
                 console.error(`Invalid inline action: "${action}"`);
                 return;
             }
@@ -29,7 +30,7 @@ export const useInlineAction = ({ schema }: UseInlineActionProps) => {
             fetch(route(schema.routes.actions.inline), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                body: JSON.stringify({ action, row_key: selectedRowKey }),
+                body: JSON.stringify({ action, row_key: getRowKeyValue(schema, selectedRow) }),
             })
                 .then((response) => {
                     onSuccess?.(response);

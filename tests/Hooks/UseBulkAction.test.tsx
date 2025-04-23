@@ -1,6 +1,5 @@
-
 import { renderHook, act } from '@testing-library/react';
-import {useBulkAction} from '@/Hooks';
+import { useBulkAction } from '@/Hooks';
 import { DataGridSchema } from '@/Schema';
 import { route } from 'ziggy-js';
 
@@ -26,9 +25,11 @@ describe('useBulkAction', () => {
             },
         },
         grid_key: 'test-grid',
-        columns: [],
+        columns: [
+            { alias: 'id', type: 'number', is_sortable: true, is_filterable: true, is_row_key: true, is_hidden: false, meta: {} },
+        ],
         default_sorts: [],
-        bulk_actions: [{ name: 'approve' }, { name: 'reject' }],
+        bulk_actions: [{ name: 'approve', meta: {} }, { name: 'reject', meta: {} }],
         inline_actions: [],
     };
 
@@ -46,15 +47,15 @@ describe('useBulkAction', () => {
     });
 
     it('should toggle row selection', () => {
-        const { result } = renderHook(() => useBulkAction<number>({ schema: mockSchema }));
+        const { result } = renderHook(() => useBulkAction<{ id: number }>({ schema: mockSchema }));
 
         act(() => {
-            result.current.toggleRowSelection(1);
+            result.current.toggleRowSelection({ id: 1 });
         });
-        expect(result.current.selectedRows).toEqual([1]);
+        expect(result.current.selectedRows).toEqual([{ id: 1 }]);
 
         act(() => {
-            result.current.toggleRowSelection(1);
+            result.current.toggleRowSelection({ id: 1 });
         });
         expect(result.current.selectedRows).toEqual([]);
     });
@@ -63,16 +64,24 @@ describe('useBulkAction', () => {
         (route as jest.Mock).mockReturnValue('/actions/bulk');
         (fetch as jest.Mock).mockResolvedValue({ ok: true });
 
-        const { result } = renderHook(() => useBulkAction<number>({ schema: mockSchema }));
+        const { result } = renderHook(() => useBulkAction<{ id: number }>({ schema: mockSchema }));
         const onSuccess = jest.fn();
+
+        await act(() => {
+            result.current.toggleRowSelection({ id: 1 });
+            result.current.toggleRowSelection({ id: 2 });
+        });
+
+
+        console.log(result.current.selectedRows);
 
         await act(async () => {
             result.current.runBulkAction({
                 action: 'approve',
-                selectedRowKeys: [1, 2],
                 onSuccess,
             });
         });
+
 
         expect(route).toHaveBeenCalledWith('/actions/bulk');
         expect(fetch).toHaveBeenCalledWith('/actions/bulk', expect.objectContaining({
@@ -84,13 +93,12 @@ describe('useBulkAction', () => {
     });
 
     it('should handle an invalid bulk action', async () => {
-        const { result } = renderHook(() => useBulkAction<number>({ schema: mockSchema }));
+        const { result } = renderHook(() => useBulkAction<{ id: number }>({ schema: mockSchema }));
         console.error = jest.fn();
 
         await act(async () => {
             result.current.runBulkAction({
                 action: 'invalid-action',
-                selectedRowKeys: [1, 2],
             });
         });
 
@@ -102,13 +110,17 @@ describe('useBulkAction', () => {
         (route as jest.Mock).mockReturnValue('/actions/bulk');
         (fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
 
-        const { result } = renderHook(() => useBulkAction<number>({ schema: mockSchema }));
+        const { result } = renderHook(() => useBulkAction<{ id: number }>({ schema: mockSchema }));
         const onError = jest.fn();
+
+        act(() => {
+            result.current.toggleRowSelection({ id: 1 });
+            result.current.toggleRowSelection({ id: 2 });
+        });
 
         await act(async () => {
             result.current.runBulkAction({
                 action: 'approve',
-                selectedRowKeys: [1, 2],
                 onError,
             });
         });

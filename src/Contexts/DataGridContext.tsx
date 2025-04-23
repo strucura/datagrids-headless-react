@@ -1,7 +1,7 @@
 import {
     DeleteBookmarkProps,
-    PerformBulkActionProps,
-    PerformInlineActionProps,
+    RunBulkActionProps,
+    RunInlineActionProps,
     StoreBookmarkProps,
     useBookmark,
     useBulkAction,
@@ -38,12 +38,12 @@ interface DataGridContextProps<T> {
     selectedRows: T[];
     setSelectedRows: Dispatch<SetStateAction<T[]>>;
     toggleRowSelection: (row: T) => void;
-    runBulkAction: ({ action, selectedRowKeys, onSuccess, onError }: PerformBulkActionProps) => void;
+    runBulkAction: ({ action, selectedRowKeys, onSuccess, onError }: RunBulkActionProps) => void;
     isRunningBulkAction: boolean;
 
     hasInlineActions: boolean;
     inlineActions: ActionSchema[];
-    runInlineAction: ({ action, selectedRowKey, onSuccess, onError }: PerformInlineActionProps) => void;
+    runInlineAction: ({ action, selectedRowKey, onSuccess, onError }: RunInlineActionProps) => void;
     isRunningInlineAction: boolean;
 
     fetchBookmarks: () => void;
