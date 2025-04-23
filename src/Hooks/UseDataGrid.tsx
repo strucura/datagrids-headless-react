@@ -64,6 +64,41 @@ export const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps
         setColumns((cols) => cols.map((col) => (col.alias === alias ? { ...col, is_hidden: !col.is_hidden } : col)));
     }, []);
 
+    const goToNextPage = useCallback(() => {
+        setPagination((prev) => {
+            if (prev.currentPage < prev.lastPage) {
+                return { ...prev, currentPage: prev.currentPage + 1 };
+            }
+            return prev;
+        });
+    }, []);
+
+    const goToPage = useCallback((page: number) => {
+        setPagination((prev) => {
+            if (page >= 1 && page <= prev.lastPage) {
+                return { ...prev, currentPage: page };
+            }
+            return prev;
+        });
+    }, []);
+
+    const goToPreviousPage = useCallback(() => {
+        setPagination((prev) => {
+            if (prev.currentPage > 1) {
+                return { ...prev, currentPage: prev.currentPage - 1 };
+            }
+            return prev;
+        });
+    }, []);
+
+    const hasNextPage = useCallback(() => {
+        return pagination.currentPage < pagination.lastPage;
+    }, [pagination.currentPage, pagination.lastPage]);
+
+    const hasPreviousPage = useCallback(() => {
+        return pagination.currentPage > 1;
+    }, [pagination.currentPage]);
+
     return {
         columns,
         setColumns,
@@ -77,5 +112,10 @@ export const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps
         toggleColumn,
         isDataGridLoading,
         fetchData,
+        goToNextPage,
+        goToPreviousPage,
+        goToPage,
+        hasNextPage,
+        hasPreviousPage,
     };
 };
