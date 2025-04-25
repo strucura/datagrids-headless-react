@@ -38,12 +38,12 @@ interface DataGridContextProps<T> {
     selectedRows: T[];
     setSelectedRows: Dispatch<SetStateAction<T[]>>;
     toggleRowSelection: (row: T) => void;
-    runBulkAction: ({ action, selectedRowKeys, onSuccess, onError }: RunBulkActionProps) => void;
+    runBulkAction: ({ action, onSuccess, onError }: RunBulkActionProps) => void;
     isRunningBulkAction: boolean;
 
     hasInlineActions: boolean;
     inlineActions: ActionSchema[];
-    runInlineAction: ({ action, selectedRowKey, onSuccess, onError }: RunInlineActionProps) => void;
+    runInlineAction: ({ action, selectedRow, onSuccess, onError }: RunInlineActionProps<T>) => void;
     isRunningInlineAction: boolean;
 
     fetchBookmarks: () => void;
