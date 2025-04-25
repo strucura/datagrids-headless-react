@@ -1,5 +1,5 @@
 {
-  "name": "@strucura/packagenamehere",
+  "name": "@strucura/datagrids-headless-react",
   "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
