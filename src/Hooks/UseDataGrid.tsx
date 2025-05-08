@@ -91,14 +91,6 @@ export const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps
         });
     }, []);
 
-    const hasNextPage = useCallback(() => {
-        return pagination.currentPage < pagination.lastPage;
-    }, [pagination.currentPage, pagination.lastPage]);
-
-    const hasPreviousPage = useCallback(() => {
-        return pagination.currentPage > 1;
-    }, [pagination.currentPage]);
-
     return {
         columns,
         setColumns,
@@ -115,7 +107,7 @@ export const useDataGrid = <T,>({ schema, onSuccess, onError }: UseDataGridProps
         goToNextPage,
         goToPreviousPage,
         goToPage,
-        hasNextPage,
-        hasPreviousPage,
+        hasNextPage:     pagination.currentPage < pagination.lastPage,
+        hasPreviousPage: pagination.currentPage > 1,
     };
 };

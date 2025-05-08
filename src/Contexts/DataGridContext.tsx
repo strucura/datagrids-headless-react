@@ -34,8 +34,8 @@ interface DataGridContextProps<T> {
     goToNextPage: () => void;
     goToPreviousPage: () => void;
     goToPage: (page: number) => void;
-    hasNextPage: () => boolean;
-    hasPreviousPage: () => boolean;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
 
     toggleColumn: (alias: string) => void;
     fetchData: () => void;
