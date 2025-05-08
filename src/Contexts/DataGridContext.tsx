@@ -27,8 +27,16 @@ interface DataGridContextProps<T> {
     sorts: SortSchema[];
     setSorts: Dispatch<SetStateAction<SortSchema[]>>;
     data: T[];
+
+    // Pagination
     pagination: PaginationSchema;
     setPagination: Dispatch<SetStateAction<PaginationSchema>>;
+    goToNextPage: () => void;
+    goToPreviousPage: () => void;
+    goToPage: (page: number) => void;
+    hasNextPage: () => boolean;
+    hasPreviousPage: () => boolean;
+
     toggleColumn: (alias: string) => void;
     fetchData: () => void;
     isDataGridLoading: boolean;
@@ -77,6 +85,11 @@ export function DataGridProvider<T>({ children, schema }: DataGridProviderProps)
         toggleColumn,
         isDataGridLoading,
         fetchData,
+        goToNextPage,
+        goToPreviousPage,
+        goToPage,
+        hasNextPage,
+        hasPreviousPage,
     } = useDataGrid<T>({ schema });
 
     const {
@@ -108,16 +121,23 @@ export function DataGridProvider<T>({ children, schema }: DataGridProviderProps)
                 // Data Grid
                 columns,
                 setColumns,
+                toggleColumn,
                 filterSets,
                 setFilterSets,
                 sorts,
                 setSorts,
                 data,
+                fetchData,
+                isDataGridLoading,
+
+                // Pagination
                 pagination,
                 setPagination,
-                toggleColumn,
-                isDataGridLoading,
-                fetchData,
+                goToNextPage,
+                goToPreviousPage,
+                goToPage,
+                hasNextPage,
+                hasPreviousPage,
 
                 // Bulk Actions
                 bulkActions,
