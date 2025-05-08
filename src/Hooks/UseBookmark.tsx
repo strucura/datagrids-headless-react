@@ -1,4 +1,4 @@
-import { BookmarkSchema, DataGridSchema, FilterSetSchema, SortSchema } from '@/Schema';
+import { BookmarkSchema, ColumnSchema, DataGridSchema, FilterSetSchema, SortSchema } from '@/Schema';
 import { useCallback, useEffect, useState } from 'react';
 import { route } from 'ziggy-js';
 
@@ -16,7 +16,7 @@ export interface StoreBookmarkProps {
     bookmarkName: string;
     filterSets: FilterSetSchema[];
     sorts: SortSchema[];
-    columns: Record<string, boolean>;
+    columns: ColumnSchema[];
     onSuccess?: () => void;
     onError?: (error: Error) => void;
 }
