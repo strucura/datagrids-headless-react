@@ -106,7 +106,7 @@ describe('useBookmark', () => {
                 bookmarkName: 'New Bookmark',
                 filterSets: [],
                 sorts: [],
-                columns: {},
+                columns: [],
                 onSuccess,
             });
         });
@@ -118,7 +118,7 @@ describe('useBookmark', () => {
                 name: 'New Bookmark',
                 filter_sets: [],
                 sorts: [],
-                columns: {},
+                columns: [],
             }),
         }));
         expect(result.current.bookmarks).toContainEqual(newBookmarkResponse.bookmark);
@@ -155,7 +155,7 @@ describe('useBookmark', () => {
                 bookmarkName: 'New Bookmark',
                 filterSets: [],
                 sorts: [],
-                columns: {},
+                columns: [],
                 onSuccess,
             });
         });
@@ -167,7 +167,7 @@ describe('useBookmark', () => {
                 name: 'New Bookmark',
                 filter_sets: [],
                 sorts: [],
-                columns: {},
+                columns: [],
             }),
         }));
         expect(result.current.bookmarks).toContainEqual(newBookmarkResponse.bookmark);
@@ -188,7 +188,7 @@ describe('useBookmark', () => {
                 bookmarkName: 'New Bookmark',
                 filterSets: [],
                 sorts: [],
-                columns: {},
+                columns: [],
                 onError,
             });
         });
